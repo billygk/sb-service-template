@@ -1,0 +1,117 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: te-hub-dev-cluster
+  region: us-east-2
+
+#privateCluster:
+#  enabled: true
+#  additionalEndpointServices:
+#    - "autoscaling"
+
+# VPC and subnet IDs are obtain manually until account permissions allow for scripting with terraform. 
+
+vpc:
+  id: "vpc-0ccae48fbb2aee43e"
+  subnets:
+    private:
+      private_subnet_1:
+        id: "subnet-0a06c61d63fa4dc69"
+      private_subnet_2:
+        id: "subnet-00debacffdbf0d546"
+    public:
+      public_subnet_1:
+        id: "subnet-080d30bcc079e9be4"
+      public_subnet_2:
+        id: "subnet-09c58b25a8f5e858f"
+
+managedNodeGroups:
+  - name: managed-ng-1
+    instanceType: "t3.medium"
+    iam:
+      withAddonPolicies:
+        imageBuilder: true
+        externalDNS: true
+        ebs: true
+        efs: true
+        albIngress: true
+        #cloudWatch: true
+        #autoScaler: true
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 6
+    volumeSize: 20
+    labels: { role: workers }
+    privateNetworking: true
+    ssh:
+      publicKeyPath: ~/.ssh/id_rsa.pub
+    availabilityZones: ["us-east-2b", "us-east-2c"]
+
+
+#nodeGroups:
+#  - name: ng-1
+#    instanceType: "t3.medium"
+#    iam:
+#      withAddonPolicies:
+#        imageBuilder: true
+#        autoScaler: true
+#        externalDNS: true
+#        ebs: true
+#        efs: true
+#        albIngress: true
+#        cloudWatch: true
+#    desiredCapacity: 1
+#    minSize: 1
+#    maxSize: 3
+#    volumeSize: 50
+#    labels: { role: workers }
+#    privateNetworking: true
+#    ssh:
+#      publicKeyPath: ~/.ssh/id_rsa.pub
+#    availabilityZones: ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+#  - name: ng-2
+#    instanceType: m5.large
+#    iam:
+#      withAddonPolicies:
+#        imageBuilder: true
+#        autoScaler: true
+#        externalDNS: true
+#        ebs: true
+#        efs: true
+#        albIngress: true
+#        cloudWatch: true
+#    desiredCapacity: 2
+#    minSize: 1
+#    maxSize: 3
+#    volumeSize: 100
+#    labels: { role: builders }
+#    privateNetworking: true
+#    ssh:
+#      publicKeyPath: ~/.ssh/eksctl_pub
+#    availabilityZones: ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+#
+#  - name: ng-3
+#    minSize: 1
+#    maxSize: 2
+#    labels: { role: ephemeral-workers}
+#    volumeSize: 50
+#    ssh:
+#      publicKeyPath: ~/.ssh/eksctl_pub
+#    iam:
+#      withAddonPolicies:
+#        imageBuilder: true
+#        autoScaler: true
+#        externalDNS: true
+#        ebs: true
+#        efs: true
+#        albIngress: true
+#        cloudWatch: true
+#    instancesDistribution:
+#      maxPrice: 0.017
+#      instanceTypes: ["t3.small", "t3.medium"] # At least one instance type should be specified
+#      onDemandBaseCapacity: 0
+#      onDemandPercentageAboveBaseCapacity: 50
+#      spotInstancePools: 2
+
+                                                                                     

@@ -1,0 +1,13 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+metadata:
+  name: rabbit-queue
+  namespace: rabbitmq-system
+
+spec:
+  replicas: 1
+  persistence:
+    storage: "50Mi"
+  service:
+    type: ClusterIP
+    

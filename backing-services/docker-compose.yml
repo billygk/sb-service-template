@@ -1,0 +1,74 @@
+version: "3.8"
+### virtual net for all services
+
+networks:
+  sb-net:
+    driver: bridge
+
+
+services:
+
+### Applications
+
+
+### Backing services
+
+  sb-mysql:
+    image: mysql:8.0
+    container_name: sb-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    command: mysqld --init-file /data/application/init.sql  --sql_mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION" --character-set-server=utf8 --collation-server=utf8_general_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    restart: on-failure
+    ports:
+      - 3306:3306
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ../sb-containers-data/sb-mysql:/var/lib/mysql
+      - ./keycloak/init.sql:/data/application/init.sql
+    networks:
+      - sb-net
+
+  sb-redis:
+    image: redis:6.2
+    #    command: redis-server --requirepass sOmE_sEcUrE_pAsS
+    container_name: sb-redis
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    volumes:
+      - ../sb-containers-data/sb-redis:/var/lib/redis
+    networks:
+      - sb-net
+
+  sb-rabbitmq:
+    image: rabbitmq:3.9-management
+    container_name: sb-rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit
+      - RABBITMQ_DEFAULT_PASS=secret
+    volumes:
+      - ../sb-containers-data/sb-rabbitmq:/var/lib/rabbitmq
+    networks:
+      - sb-net
+
+  sb-keycloak:
+    depends_on:
+      - sb-mysql
+    image: quay.io/keycloak/keycloak:17.0.0
+    container_name: sb-keycloak
+    command: "start-dev --db=mysql --db-url-host=sb-mysql --db-url=jdbc:mysql://sb-mysql/keycloak --db-username=keycloak --db-password=keycloakPassword"
+#    volumes:
+#      - ../sb-containers-data/keycloak:/opt/jboss/keycloak/imports
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: secret
+    ports:
+      - 8080:8080
+    networks:
+      - sb-net
