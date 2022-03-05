@@ -1,4 +1,4 @@
-package com.github.cloud.edgesrv.config;
+package com.github.billygk.cloud.edgesrv.config;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;

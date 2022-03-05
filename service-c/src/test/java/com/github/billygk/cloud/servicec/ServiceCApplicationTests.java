@@ -1,10 +1,10 @@
-package com.github.cloud.edgesrv;
+package com.github.billygk.cloud.servicec;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EdgeSrvApplicationTests {
+class ServiceCApplicationTests {
 
 	@Test
 	void contextLoads() {

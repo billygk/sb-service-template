@@ -1,13 +1,13 @@
-package com.github.cloud.edgesrv;
+package com.github.billygk.cloud.servicec;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EdgeSrvApplication {
+public class ServiceCApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EdgeSrvApplication.class, args);
+		SpringApplication.run(ServiceCApplication.class, args);
 	}
 
 }
