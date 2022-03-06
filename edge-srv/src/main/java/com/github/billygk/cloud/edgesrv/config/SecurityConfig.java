@@ -1,7 +1,5 @@
-package com.github.billygk.cloud.edgesrv.security;
+package com.github.billygk.cloud.edgesrv.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -10,7 +8,8 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.client.web.server.WebSessionServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.HttpStatusServerEntryPoint;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
@@ -21,42 +20,35 @@ import reactor.core.publisher.Mono;
 
 @EnableWebFluxSecurity
 public class SecurityConfig {
-    private final Logger log = LoggerFactory.getLogger(getClass());
+
+	@Bean
+    ServerOAuth2AuthorizedClientRepository authorizedClientRepository() {
+		return new WebSessionServerOAuth2AuthorizedClientRepository();
+	}
 
     @Bean
-    SecurityWebFilterChain springSecurityWebFilterChain(
+    SecurityWebFilterChain springSecurityFilterChain(
             ServerHttpSecurity http,
-            ReactiveClientRegistrationRepository clientRegistrationRepository
-    ) {
+            ReactiveClientRegistrationRepository clientRegistrationRepository) {
         return http
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers(HttpMethod.GET, "/").permitAll()
-                        .pathMatchers(HttpMethod.POST, "/v1/quote/enquire").permitAll()
+//                        .pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
+                        .pathMatchers("/service-a").permitAll()
+                        .pathMatchers("/logout").permitAll()
+//                        .pathMatchers(HttpMethod.GET, "/books/**").permitAll()
                         .anyExchange().authenticated()
                 )
+//                .exceptionHandling(exceptionHandling -> exceptionHandling
+//                        .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED)))
+
                 .oauth2Login(Customizer.withDefaults())
-
-                /*
-                 * When client (SPA) gets 401 it should redirect as follows:
-                 *
-                 * login(): void {
-                 *   window.open('/oauth2/authorization/keycloak', '_self');
-                 * }
-                 */
-//                  .exceptionHandling(exceptionHandling -> exceptionHandling
-//                      .authenticationEntryPoint(new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED)))
-
-                .logout(logout -> logout.logoutSuccessHandler(
-                        oidcLogoutSuccessHandler(clientRegistrationRepository)))
+                .logout(logout -> logout.logoutSuccessHandler(oidcLogoutSuccessHandler(clientRegistrationRepository)))
                 .csrf(csrf -> csrf.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
-//                .csrf().disable()
                 .build();
     }
 
-    private ServerLogoutSuccessHandler oidcLogoutSuccessHandler(
-            ReactiveClientRegistrationRepository clientRegistrationRepository) {
-        var oidcLogoutSuccessHandler =
-                new OidcClientInitiatedServerLogoutSuccessHandler(clientRegistrationRepository);
+    private ServerLogoutSuccessHandler oidcLogoutSuccessHandler(ReactiveClientRegistrationRepository clientRegistrationRepository) {
+        var oidcLogoutSuccessHandler = new OidcClientInitiatedServerLogoutSuccessHandler(clientRegistrationRepository);
         oidcLogoutSuccessHandler.setPostLogoutRedirectUri("{baseUrl}");
         return oidcLogoutSuccessHandler;
     }
@@ -72,4 +64,5 @@ public class SecurityConfig {
             return chain.filter(exchange);
         };
     }
+
 }

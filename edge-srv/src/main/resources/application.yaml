@@ -35,11 +35,8 @@ spring:
           max-life-time: 60s
 
       default-filters:
-        # Client Session (cookie)
         - SaveSession
-        # fwd jwt in header on internal requests
         - TokenRelay
-        # Basic rate limiter
         - name: RequestRateLimiter
           args:
             redis-rate-limiter.replenishRate: 10
@@ -60,23 +57,15 @@ spring:
 
       # Main route definition
       routes:
-        - id: catalog-route
-          uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/books
+        - id: service-a-route
+          uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/service-a
           predicates:
-            - Path=/books/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: catalogCircuitBreaker
-                fallbackUri: forward:/catalog-fallback
-        - id: order-route
-          uri: ${ORDER_SERVICE_URL:http://localhost:9002}/orders
+            - Path=/service-a/**
+        - id: service-b-route
+          uri: ${ORDER_SERVICE_URL:http://localhost:9002}/service-b
           predicates:
-            - Path=/orders/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: orderCircuitBreaker
+            - Path=/service-b/**
+
 #  rabbitmq:
 #    host: localhost
 #    port: 5672
@@ -98,12 +87,14 @@ spring:
       client:
         registration:
           keycloak:
-            client-id: edge-client-id
-            client-secret: edge-keycloak-secret
+            client-id: sb-service-edge
+            client-secret: JQ164mayroloJH7l4dm4XhsDSSjsK2Zu
+#            authorization-grant-type: authorization_code
+#            redirect-uri: ${KEYCLOAK_URL:http://localhost:8080}/login/oauth2/code/keycloak
             scope: openid,roles
         provider:
           keycloak:
-            issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/realms/sb-service
+            issuer-uri: ${KEYCLOAK_URL:http://localhost:8080}/realms/sbService
   sleuth:
     sampler:
       probability: 1.0
@@ -148,8 +139,7 @@ management:
       application: ${spring.application.name}
 
 logging:
-  group:
-    circuitbreaker: io.github.resilience4j, org.springframework.cloud.circuitbreaker
   level:
-    circuitbreaker: info
-#    io.github.resilience4j: DEBUG
+    ROOT: INFO
+    org.springframework: INFO
+    org.springframework.cloud.gateway: DEBUG
