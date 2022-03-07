@@ -69,8 +69,9 @@ $ docker-compose [build|start]
 If all goes well we should have all our backing services up and running. 
 
 We only need to setup our keycloak server, we need to:
-- create realm
-- create a client
-- create a couple of roles
-- create a couple of users
+- create realm: "**sbService**"
+- create a client: "**sb-service-edge**" , get **client secret** from keycloak and update edge application.yml
+- create a couple of realm roles: **sbAdmin**, **sbUser1**, **sbUser2**
+- create a couple of users: **sbadmin**, **sbuser1**, **sbuser2** and link to corresponding roles.
+
 

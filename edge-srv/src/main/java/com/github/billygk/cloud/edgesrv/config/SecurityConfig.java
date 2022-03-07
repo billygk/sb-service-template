@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .authorizeExchange(exchange -> exchange
 //                        .pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
                         .pathMatchers("/service-a").permitAll()
+                        .pathMatchers("/service-b").permitAll()
+                        .pathMatchers("/service-c").permitAll()
                         .pathMatchers("/logout").permitAll()
 //                        .pathMatchers(HttpMethod.GET, "/books/**").permitAll()
                         .anyExchange().authenticated()

@@ -65,6 +65,10 @@ spring:
           uri: ${ORDER_SERVICE_URL:http://localhost:9002}/service-b
           predicates:
             - Path=/service-b/**
+        - id: service-c-route
+          uri: ${ORDER_SERVICE_URL:http://localhost:9003}/service-c
+          predicates:
+            - Path=/service-c/**
 
 #  rabbitmq:
 #    host: localhost
