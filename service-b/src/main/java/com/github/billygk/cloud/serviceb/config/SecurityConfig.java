@@ -23,6 +23,7 @@ public class SecurityConfig {
         String localHostV6 = "0:0:0:0:0:0:0:1";
 
         http.authorizeRequests(authorize -> authorize
+                .mvcMatchers( "/actuator/*").permitAll()
                 .mvcMatchers( "/service-b").permitAll()
                 .mvcMatchers( "/service-b/auth-user1").hasAnyRole("sbAdmin", "sbUser1")
                 .mvcMatchers( "/service-b/auth-user2").hasAnyRole("sbAdmin", "sbUser2")

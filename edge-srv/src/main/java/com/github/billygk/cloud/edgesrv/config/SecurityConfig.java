@@ -33,6 +33,7 @@ public class SecurityConfig {
         return http
                 .authorizeExchange(exchange -> exchange
 //                        .pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
+                        .pathMatchers( "/actuator/*").permitAll()
                         .pathMatchers("/service-a").permitAll()
                         .pathMatchers("/service-b").permitAll()
                         .pathMatchers("/service-c").permitAll()

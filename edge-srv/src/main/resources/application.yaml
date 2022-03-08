@@ -58,15 +58,15 @@ spring:
       # Main route definition
       routes:
         - id: service-a-route
-          uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/service-a
+          uri: ${SERVICE_A_URL:http://localhost:9001}/service-a
           predicates:
             - Path=/service-a/**
         - id: service-b-route
-          uri: ${ORDER_SERVICE_URL:http://localhost:9002}/service-b
+          uri: ${SERVICE_B_URL:http://localhost:9002}/service-b
           predicates:
             - Path=/service-b/**
         - id: service-c-route
-          uri: ${ORDER_SERVICE_URL:http://localhost:9003}/service-c
+          uri: ${SERVICE_C_URL:http://localhost:9003}/service-c
           predicates:
             - Path=/service-c/**
 
@@ -105,18 +105,18 @@ spring:
   zipkin:
     base-url: ${ZIPKIN_URL:http://localhost:9411/}
 
-#resilience4j:
-#  circuitbreaker:
-#    configs:
-#      default:
-#        slidingWindowSize: 20
-#        permittedNumberOfCallsInHalfOpenState: 5
-#        failureRateThreshold: 50
-#        waitDurationInOpenState: 15000
-#  timelimiter:
-#    configs:
-#      default:
-#        timeoutDuration: 5s
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 20
+        permittedNumberOfCallsInHalfOpenState: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15000
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 5s
 
 info:
   system: Edge cloud gateway
@@ -143,7 +143,10 @@ management:
       application: ${spring.application.name}
 
 logging:
+  group:
+    circuitbreaker: io.github.resilience4j, org.springframework.cloud.circuitbreaker
   level:
     ROOT: INFO
     org.springframework: INFO
     org.springframework.cloud.gateway: DEBUG
+    circuitbreaker: debug

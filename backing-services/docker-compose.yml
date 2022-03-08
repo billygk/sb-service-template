@@ -1,16 +1,125 @@
 version: "3.8"
 ### virtual net for all services
 
-networks:
-  sb-net:
-    driver: bridge
+#networks:
+#  sb-net:
+#    driver: bridge
 
 
 services:
 
 ### Applications
-
-
+#  edge-service:
+#    depends_on:
+#      - fluent-bit
+#      - sb-keycloak
+#      - sb-redis
+#      - tempo
+#    image: "docker.io/library/edge-srv:0.0.1"
+#    container_name: "edge-service"
+#    ports:
+#      - 9000:9000
+#      - 8000:8000
+#    environment:
+#      # Buildpacks environment variable to enable debug through a socket on port 8000
+#      - BPL_DEBUG_ENABLED=true
+#      - BPL_DEBUG_PORT=8000
+#      - SERVICE_A_URL=http://service-a:9001
+#      - SERVICE_B_URL=http://service-b:9002
+#      - SERVICE_C_URL=http://service-c:9003
+#      - KEYCLOAK_URL=http://sb-keycloak:8080
+#      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+#      - SPRING_RABBITMQ_HOST=sb-rabbitmq
+#      - SPRING_REDIS_HOST=sb-redis
+#      - ZIPKIN_URL=http://tempo:9411
+#    logging:
+#      driver: fluentd
+#      options:
+#        fluentd-address: 127.0.0.1:24224
+##    networks:
+##      - sb-net
+#
+#  service-a:
+#    depends_on:
+#      - fluent-bit
+#      - sb-keycloak
+#      - tempo
+#    image: "docker.io/library/service-a:0.0.1"
+#    container_name: "service-a"
+#    ports:
+#      - 9001:9001
+#      - 8001:8001
+#    environment:
+#      # Buildpacks environment variable to configure the number of threads in memory calculation
+#      - BPL_JVM_THREAD_COUNT=50
+#      # Buildpacks environment variable to enable debug through a socket on port 8001
+#      - BPL_DEBUG_ENABLED=true
+#      - BPL_DEBUG_PORT=8001
+#      - KEYCLOAK_URL=http://sb-keycloak:8080
+#      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+#      - SPRING_RABBITMQ_HOST=sb-rabbitmq
+#      - ZIPKIN_URL=http://tempo:9411
+#    logging:
+#      driver: fluentd
+#      options:
+#        fluentd-address: 127.0.0.1:24224
+##    networks:
+##      - sb-net
+#
+#  service-b:
+#    depends_on:
+#      - fluent-bit
+#      - sb-keycloak
+#      - tempo
+#    image: "docker.io/library/service-b:0.0.1"
+#    container_name: "service-b"
+#    ports:
+#      - 9002:9002
+#      - 8002:8002
+#    environment:
+#      # Buildpacks environment variable to configure the number of threads in memory calculation
+#      - BPL_JVM_THREAD_COUNT=50
+#      # Buildpacks environment variable to enable debug through a socket on port 8001
+#      - BPL_DEBUG_ENABLED=true
+#      - BPL_DEBUG_PORT=8002
+#      - KEYCLOAK_URL=http://sb-keycloak:8080
+#      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+#      - SPRING_RABBITMQ_HOST=sb-rabbitmq
+#      - ZIPKIN_URL=http://tempo:9411
+#    logging:
+#      driver: fluentd
+#      options:
+#        fluentd-address: 127.0.0.1:24224
+##    networks:
+##      - sb-net
+##
+#  service-c:
+#    depends_on:
+#      - fluent-bit
+#      - sb-keycloak
+#      - tempo
+#    image: "docker.io/library/service-c:0.0.1"
+#    container_name: "service-c"
+#    ports:
+#      - 9003:9003
+#      - 8003:8003
+#    environment:
+#      # Buildpacks environment variable to configure the number of threads in memory calculation
+#      - BPL_JVM_THREAD_COUNT=50
+#      # Buildpacks environment variable to enable debug through a socket on port 8001
+#      - BPL_DEBUG_ENABLED=true
+#      - BPL_DEBUG_PORT=8003
+#      - KEYCLOAK_URL=http://sb-keycloak:8080
+#      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+#      - SPRING_RABBITMQ_HOST=sb-rabbitmq
+#      - ZIPKIN_URL=http://tempo:9411
+#    logging:
+#      driver: fluentd
+#      options:
+#        fluentd-address: 127.0.0.1:24224
+##    networks:
+##      - sb-net
+#
 ### Backing services
 
   sb-mysql:
@@ -27,8 +136,8 @@ services:
     volumes:
       - ../sb-containers-data/sb-mysql:/var/lib/mysql
       - ./keycloak/init.sql:/data/application/init.sql
-    networks:
-      - sb-net
+#    networks:
+#      - sb-net
 
   sb-redis:
     image: redis:6.2
@@ -40,8 +149,8 @@ services:
       - REDIS_REPLICATION_MODE=master
     volumes:
       - ../sb-containers-data/sb-redis:/var/lib/redis
-    networks:
-      - sb-net
+#    networks:
+#      - sb-net
 
   sb-rabbitmq:
     image: rabbitmq:3.9-management
@@ -54,8 +163,8 @@ services:
       - RABBITMQ_DEFAULT_PASS=secret
     volumes:
       - ../sb-containers-data/sb-rabbitmq:/var/lib/rabbitmq
-    networks:
-      - sb-net
+#    networks:
+#      - sb-net
 
   sb-keycloak:
     depends_on:
@@ -70,5 +179,69 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: secret
     ports:
       - 8080:8080
-    networks:
-      - sb-net
+#    networks:
+#      - sb-net
+
+# Observability
+
+#  grafana:
+#    image: grafana/grafana:8.2.3
+#    container_name: grafana
+#    depends_on:
+#      - loki
+#      - prometheus
+#      - tempo
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      GF_SECURITY_ADMIN_USER: user
+#      GF_SECURITY_ADMIN_PASSWORD: password
+#    volumes:
+#      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+#      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+##    networks:
+##      - sb-net
+#
+#  loki:
+#    image: grafana/loki:2.4.0
+#    container_name: loki
+#    depends_on:
+#      - fluent-bit
+#    ports:
+#      - "3100:3100"
+##    networks:
+##      - sb-net
+#
+#  prometheus:
+#    image: prom/prometheus:v2.30.3
+#    container_name: prometheus
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+##    networks:
+##      - sb-net
+#
+#  tempo:
+#    image: grafana/tempo:1.2.0
+#    container_name: tempo
+#    command: -config.file /etc/tempo-config.yml
+#    volumes:
+#      - ./tempo/tempo.yml:/etc/tempo-config.yml
+#    ports:
+#      - "3101:3100"     # Tempo
+#      - "9411:9411"     # Zipkin
+##    networks:
+##      - sb-net
+#
+#  fluent-bit:
+#    image: grafana/fluent-bit-plugin-loki:2.4.0-amd64
+#    container_name: fluent-bit
+#    ports:
+#      - "24224:24224"
+#    environment:
+#      - LOKI_URL=http://loki:3100/loki/api/v1/push
+#    volumes:
+#      - ./fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+##    networks:
+##      - sb-net

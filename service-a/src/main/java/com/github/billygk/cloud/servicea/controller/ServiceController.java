@@ -24,6 +24,7 @@ public class ServiceController {
             @RequestHeader MultiValueMap<String, String> headers,
             Principal principal
     ) {
+        log.debug("=> /service-a");
         Map<String, String> response = new HashMap<>();
         response.put("path", "/service-a");
         response.put("timestamp", Instant.now().toString());

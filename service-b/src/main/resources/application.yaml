@@ -31,13 +31,21 @@ spring:
         initial-interval: 1000 # 1s
         max-interval: 2000 # 2s
         multiplier: 1.1
+  sleuth:
+    sampler:
+      probability: 1.0
+  zipkin:
+    base-url: ${ZIPKIN_URL:http://localhost:9411/}
 
+
+info:
+  system: Service B
 
 management:
   endpoints:
     web:
       exposure:
-        include: health, info
+        include: flyway, health, heapdump, info, prometheus
   endpoint:
     health:
       show-details: always
@@ -48,8 +56,7 @@ management:
     tags:
       application: ${spring.application.name}
 
-
 logging:
   level:
     ROOT: INFO
-    org.springframework.security: TRACE
+#    org.springframework.security: TRACE
