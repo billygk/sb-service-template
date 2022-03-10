@@ -1,0 +1,41 @@
+server:
+  port: 9101
+  tomcat:
+    connection-timeout: 2s
+    threads:
+      max: 5
+      min-spare: 1
+
+  servlet:
+    session:
+      timeout: ${SERVER_SERVLET_SESSION:30m}
+
+spring:
+  application:
+    name: service-q
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:rabbit}
+    password: ${RABBITMQ_PASS:secret}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+      probes:
+        enabled: true
+
+
+logging:
+  level:
+    ROOT: INFO
+#    org.eclipse.jgit: DEBUG
+#    com.jcraft.jsc: DEBUG
+#    org.springframework: INFO

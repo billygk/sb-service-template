@@ -25,6 +25,8 @@ public class SecurityConfig {
         http.authorizeRequests(authorize -> authorize
                 .mvcMatchers( "/actuator/*").permitAll()
                 .mvcMatchers( "/service-c").permitAll()
+                .mvcMatchers( "/service-c/queue-job").permitAll()
+//                .hasAnyRole("sbAdmin", "sbUser2")
                 .mvcMatchers( "/service-c/auth-user1").hasAnyRole("sbAdmin", "sbUser1")
                 .mvcMatchers( "/service-c/auth-user2").hasAnyRole("sbAdmin", "sbUser2")
                 .anyRequest().authenticated()

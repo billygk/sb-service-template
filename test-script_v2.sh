@@ -22,5 +22,17 @@ fi
 echo "sleeping ... 0.$sltime"
 #sleep "0.$sltime"
 
+curl --location --request POST 'http://localhost:9003/service-c/queue-job' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: XSRF-TOKEN=2728c2bd-7c23-4e6d-bd55-d376b192f134' \
+--data-raw '{
+    "jobType": "Job X",
+    "jobData": [
+        {
+            "key": "param1",
+            "value": "value1"
+        }
+    ]
+}'
 done
 
