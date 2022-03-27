@@ -1,0 +1,69 @@
+server:
+  port: 8888
+  tomcat:
+    connection-timeout: 2s
+    threads:
+      max: 10
+      min-spare: 2
+
+
+encrypt:
+  key: ${CONFIGURATION_ENCRIPTION_KEY:super_secure_dev_encryption_key}
+
+spring:
+  application:
+    name: config-service
+  security:
+    user:
+      name: ${CONFIGURATION_USER:configUser}
+      password: ${CONFIGURATION_PASSWORD:configPassword}
+
+
+  cloud:
+    config:
+      server:
+#        native:
+#          searchLocations: config
+        git:
+          uri: https://github.com/billygk/sb-service-template-config-repo.git
+          default-label: main
+          clone-on-start: true
+          timeout: 5
+          force-pull: true
+
+# private repo for config
+# See build.gradle
+# Workaround to solve bug #2015 on JGit https://github.com/spring-cloud/spring-cloud-config/issues/2015
+#      server:
+#        git:
+#          uri: git@github.com:billygk/sb-service-template-config-repo.git
+#          ignore-local-ssh-settings: true
+#          default-label: main
+#          clone-on-start: true
+##          force-pull: true
+#          privateKey: ...
+##          skip-ssl-validation: true
+##          strict-host-key-checking: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+      probes:
+        enabled: true
+#  metrics:
+#    tags:
+#      application: ${spring.application.name}
+
+
+logging:
+  level:
+    ROOT: INFO
+#    org.eclipse.jgit: DEBUG
+#    com.jcraft.jsc: DEBUG
+#    org.springframework: INFO
