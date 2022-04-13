@@ -9,15 +9,15 @@
 
 # aws credentials will be read from .aws/credentials
 
-# url example: 348579843811.dkr.ecr.us-east-2.amazonaws.com/te-hub-config-service
+# url example: 123456789012.dkr.ecr.us-east-2.amazonaws.com/te-hub-config-service
 # aws account id
-ACCOUNT=348579843811
+ACCOUNT=123456789012
 # aws region we will be working on
 REGION=us-east-2
 # k8s secret name
 SECRET_NAME=ecr-registry
 # Email
-EMAIL=gkrepper@tenantevaluation.com
+EMAIL=email@email.com
 # Token from aws ecr  
 ## old TOKEN=`aws ecr get-login --region ${REGION} --registry-ids ${ACCOUNT} | cut -d' ' -f6`
 TOKEN=`aws ecr get-login-password --region ${REGION}`
