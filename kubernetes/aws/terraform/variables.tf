@@ -15,7 +15,7 @@ variable "cluster_name" {
 
 variable "vpc_name" {
   type = string
-  default = "dev-tehub"
+  default = "dev-vpc"
 }
 
 resource "aws_key_pair" "billy" {

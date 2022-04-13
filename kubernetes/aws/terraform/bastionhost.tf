@@ -30,7 +30,7 @@ resource "aws_instance" "bastion" {
   availability_zone = module.vpc.azs[0]
   subnet_id         = module.vpc.public_subnets[0]
   instance_type     = "t2.small"
-  key_name          = "guillermo-key"
+  key_name          = "billy-key"
   disable_api_termination = true
   vpc_security_group_ids = [module.bastion_security_group.security_group_id]
 
@@ -44,7 +44,7 @@ resource "aws_instance" "bastion" {
   }
 
   tags = {
-    Name = "tehub-dev-bastion"
+    Name = "dev-bastion"
   }
 }
 
@@ -52,7 +52,7 @@ resource "aws_eip" "bastion_eip" {
   instance = aws_instance.bastion.id
   vpc      = true
   tags = {
-    Name = "tehub-dev-bastion-ip"
+    Name = "dev-bastion-ip"
   }
 }
 
