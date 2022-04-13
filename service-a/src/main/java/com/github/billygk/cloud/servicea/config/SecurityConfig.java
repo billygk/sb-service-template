@@ -24,6 +24,9 @@ public class SecurityConfig {
 
         http.authorizeRequests(authorize -> authorize
                 .mvcMatchers( "/actuator/*").permitAll()
+                .mvcMatchers( "/v2/api-docs/*").permitAll()
+                .mvcMatchers( "/spring-security-rest/api/v2/api-docs/*").permitAll()
+                .mvcMatchers( "/api/*").permitAll()
                 .mvcMatchers( "/service-a").permitAll()
                 .mvcMatchers( "/service-a/auth-user1").hasAnyRole("sbAdmin", "sbUser1")
                 .mvcMatchers( "/service-a/auth-user2").hasAnyRole("sbAdmin", "sbUser2")

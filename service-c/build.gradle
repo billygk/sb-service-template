@@ -33,6 +33,8 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
 	implementation 'org.springframework.retry:spring-retry'
+// https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
 
 	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 	compileOnly 'org.projectlombok:lombok'
