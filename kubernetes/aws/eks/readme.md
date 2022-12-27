@@ -47,10 +47,10 @@ data:
     - groups:
       - system:bootstrappers
       - system:nodes
-      rolearn: arn:aws:iam::331758521346:role/eksctl-zinc-dev-cluster-nodegroup-NodeInstanceRole-1LQJQFEQRUC54
+      rolearn: arn:aws:iam::123123123123:role/eksctl-dev-cluster-nodegroup-NodeInstanceRole-1LQJQFEQRUC54
       username: system:node:{{EC2PrivateDNSName}}
   mapUsers: |
-    - userarn: arn:aws:iam::331758521346:user/Oscar
+    - userarn: arn:aws:iam::123123123123:user/NewUser
       username: Oscar
       groups:
         - system:masters

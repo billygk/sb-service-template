@@ -1,1 +1,8 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://repo.spring.io/snapshot' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
 rootProject.name = 'service-a'

@@ -53,7 +53,7 @@ public class ServiceController {
 //            @RequestHeader HttpHeaders headers
             @RequestHeader MultiValueMap<String, String> headers
     ) {
-        log.debug("=> /service-a/auth-user1");
+        log.debug("=> /service-a/auth-user2");
         Map<String, String> response = new HashMap<>();
         response.put("path", "/service-a/auth-user2");
         response.put("timestamp", Instant.now().toString());

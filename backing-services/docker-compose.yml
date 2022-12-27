@@ -3,7 +3,7 @@ services:
 
 ### Backing services
   sb-mysql:
-    image: mysql:8.0
+    image: mysql:8
     container_name: sb-mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
@@ -16,8 +16,19 @@ services:
     volumes:
       - ../sb-containers-data/sb-mysql:/var/lib/mysql
       - ./keycloak/init.sql:/data/application/init.sql
+#  postgres:
+#    image: postgres:14
+#    container_name: "postgres"
+#    ports:
+#      - 5432:5432
+#    environment:
+#      - POSTGRES_USER=dbadmin
+#      - POSTGRES_PASSWORD=secret
+#      - POSTGRES_DB=keycloak
+#    volumes:
+#      - ./postgres-data:/var/lib/postgresql/data
   sb-redis:
-    image: redis:6.2
+    image: redis:7
     #    command: redis-server --requirepass sOmE_sEcUrE_pAsS
     container_name: sb-redis
     ports:
@@ -27,7 +38,7 @@ services:
     volumes:
       - ../sb-containers-data/sb-redis:/var/lib/redis
   sb-rabbitmq:
-    image: rabbitmq:3.9-management
+    image: rabbitmq:3.10-management
     container_name: sb-rabbitmq
     ports:
       - 5672:5672
@@ -40,9 +51,9 @@ services:
   sb-keycloak:
     depends_on:
       - sb-mysql
-    image: quay.io/keycloak/keycloak:17.0.0
+    image: quay.io/keycloak/keycloak:18.0
     container_name: sb-keycloak
-    command: "start-dev --db=mysql --db-url-host=sb-mysql --db-url=jdbc:mysql://sb-mysql/keycloak --db-username=keycloak --db-password=keycloakPassword"
+    command: "start-dev --db=mysql --db-url-host=sb-mysql --db-url=jdbc:mysql://sb-mysql/keycloak --db-username=keycloak --db-password=secret"
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: secret

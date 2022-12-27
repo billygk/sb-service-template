@@ -1,8 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.4'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
-	id "com.glovoapp.semantic-versioning" version "1.1.7"
+	id "com.glovoapp.semantic-versioning" version "1.1.10"
 
 }
 
@@ -15,7 +15,7 @@ repositories {
 }
 
 ext {
-	set('springCloudVersion', "2021.0.1")
+	set('springCloudVersion', "2021.0.3")
 }
 
 dependencies {

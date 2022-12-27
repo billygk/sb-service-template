@@ -123,7 +123,7 @@ services:
       - ./keycloak/init.sql:/data/application/init.sql
 
   sb-redis:
-    image: redis:6.2
+    image: redis:7.0
     #    command: redis-server --requirepass sOmE_sEcUrE_pAsS
     container_name: sb-redis
     ports:
@@ -134,7 +134,7 @@ services:
       - ../sb-containers-data/sb-redis:/var/lib/redis
 
   sb-rabbitmq:
-    image: rabbitmq:3.9-management
+    image: rabbitmq:3.10-management
     container_name: sb-rabbitmq
     ports:
       - 5672:5672
@@ -148,7 +148,7 @@ services:
   sb-keycloak:
     depends_on:
       - sb-mysql
-    image: quay.io/keycloak/keycloak:17.0.0
+    image: quay.io/keycloak/keycloak:18.0.0
     container_name: sb-keycloak
     command: "start-dev --db=mysql --db-url-host=sb-mysql --db-url=jdbc:mysql://sb-mysql/keycloak --db-username=keycloak --db-password=keycloakPassword"
     environment:

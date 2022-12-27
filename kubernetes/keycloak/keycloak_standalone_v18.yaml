@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+#  annotations:
+#    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-2:836444357046:certificate/2bf3253a-f6e5-444d-a891-2b769d8c5586
+#    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+#    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "8080,443,8443"
+spec:
+  ports:
+  - name: http
+    port: 443
+    targetPort: 8443
+  selector:
+    app: keycloak
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:18.0.0
+        #args: ["start-dev"]
+        env:
+
+
+        - name: KC_METRICS_ENABLED
+          value: "true"
+        - name: JGROUPS_DISCOVERY_PROTOCOL
+          value: "dns.DNS_PING"
+        - name: CACHE_OWNERS_COUNT
+          value: "2"
+        - name: CACHE_OWNERS_AUTH_SESSIONS_COUNT
+          value: "2"
+        - name: KEYCLOAK_SERVICE_PORT
+          value: "8080"
+        - name: KEYCLOAK_SERVICE_PROTOCOL
+          value: "TCP"
+        - name: KEYCLOAK_DISCOVERY_SERVICE_PORT
+          value: "8080"
+
+        - name: KEYCLOAK_ADMIN
+          value: "admin"
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          value: "secret"
+        - name: KC_PROXY
+          value: "edge"
+        - name: KC_DB
+          value: "mysql"
+        - name: KC_DB_URL
+          value: "jdbc:mysql://dev-db01.cndngvvcwhr0.us-east-2.rds.amazonaws.com:3306/keycloak"
+        - name: KC_DB_USERNAME
+          value: "keycloak_db_user"
+        - name: KC_DB_PASSWORD
+          value: "keycloak_db_password"
+        ports:
+        - name: http
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /realms/master
+            port: 8080
+
